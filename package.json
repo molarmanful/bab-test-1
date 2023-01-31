@@ -1,0 +1,29 @@
+{
+  "name": "bab-test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^5.43.1",
+    "js-combinatorics": "^2.1.1",
+    "js-easing-functions": "^1.0.3",
+    "vue": "^3.2.45",
+    "vue-resize-observer": "^2.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@unocss/reset": "^0.48.5",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "browserslist": "^4.21.4",
+    "lightningcss": "^1.18.0",
+    "unocss": "^0.48.5",
+    "unocss-preset-autoprefixer": "^0.0.4",
+    "vite": "^4.0.4"
+  }
+}
