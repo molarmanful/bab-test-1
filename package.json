@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@babylonjs/core": "^5.43.1",
+    "@babylonjs/loaders": "^5.45.0",
+    "babylonjs-gltf2interface": "^5.45.0",
     "vue": "^3.2.45",
     "vue-resize-observer": "^2.0.15"
   },

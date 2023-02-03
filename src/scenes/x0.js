@@ -1,15 +1,24 @@
 import * as B from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core'
+import '@babylonjs/loaders'
+import handURL from './assets/hand.stl'
+import normURL from './assets/normal.jpg'
+// import envURL from './assets/environment.env'
 
 let createScene = async (canvas, cb = _ => { }) => {
-  let dpiScale = 4
+  let dpiScale = 1
   let engine = new B.Engine(canvas, true)
   engine.setHardwareScalingLevel(devicePixelRatio / dpiScale)
   let scene = new B.Scene(engine)
   scene.clearColor = B.Color3.Black().toLinearSpace()
+  // scene.environmentTexture = B.CubeTexture.CreateFromPrefilteredData(envURL, scene)
 
-  let camera = new B.ArcRotateCamera('camera', Math.PI / 4, Math.PI / 4, 100, B.Vector3.Zero(), scene)
+  let camera = new B.ArcRotateCamera('camera', 0, Math.PI / 3, 100, B.Vector3.Zero(), scene)
   camera.fov = .1
-  // camera.attachControl(canvas, true)
+  camera.panningSensibility = 0
+  camera.lowerRadiusLimit = camera.upperRadiusLimit = camera.radius
+  camera.lowerBetaLimit = camera.upperBetaLimit = camera.beta
+  camera.attachControl(canvas, true)
 
   let pipe = new B.DefaultRenderingPipeline('pipe', true, scene, [camera])
   pipe.samples = 4
@@ -17,9 +26,13 @@ let createScene = async (canvas, cb = _ => { }) => {
   pipe.chromaticAberration.aberrationAmount = 6
   pipe.grainEnabled = true
   pipe.grain.animated = true
+  pipe.bloomEnabled = true
 
   // let light = new B.HemisphericLight('light', new B.Vector3(0, 1, .5), scene)
-  let light = new B.DirectionalLight('light', new B.Vector3(-1, -4, -2), scene)
+  let dir = new B.Vector3(-1, -4, -2)
+  let hlight = new B.HemisphericLight('light', dir.scale(-1), scene)
+  hlight.intensity = .1
+  let light = new B.DirectionalLight('light', dir, scene)
   light.intensity = 1.4
   let shadow = new B.CascadedShadowGenerator(2048, light)
   shadow.usePercentageCloserFiltering = true
@@ -27,17 +40,44 @@ let createScene = async (canvas, cb = _ => { }) => {
   shadow.lambda = 1
   shadow.cascadeBlendPercentage = 0
   shadow.shadowMaxZ = camera.maxZ
-  shadow.depthClamp = false
+  shadow.depthClamp = true
   shadow.autoCalcDepthBounds = true
 
   // let gl = new B.GlowLayer('glow', scene, {
   //   mainTextureSamples: 4,
   // })
 
-  let boxSize = .2
-  let box = B.MeshBuilder.CreateBox('box', { size: boxSize }, scene)
-  shadow.getShadowMap().renderList.push(box)
-  box.receiveShadows = true
+  let meshImports = await B.SceneLoader.ImportMeshAsync('hand', handURL, void 0, scene, null, '.stl')
+  let hand = meshImports.meshes[0]
+  hand.position = new B.Vector3(-1, -2, 1)
+  hand.rotation = new Vector3(0, Math.PI / 3, -.2)
+  hand.scaling = Vector3.One().scale(.02)
+  shadow.getShadowMap().renderList.push(hand)
+  hand.receiveShadows = true
+
+  let hMat = new B.StandardMaterial('', scene)
+  hand.material = hMat
+
+  // let sphereSize = 2
+  // let sphere = B.MeshBuilder.CreateSphere('sphere', { diameter: sphereSize * 2 }, scene)
+  // shadow.getShadowMap().renderList.push(sphere)
+  // sphere.receiveShadows = true
+
+  let ground = B.MeshBuilder.CreateDisc('ground', { radius: 20 }, scene)
+  ground.position = new B.Vector3(0, -2, 0)
+  ground.rotation = new B.Vector3(Math.PI / 2, 0, 0)
+  ground.receiveShadows = true
+
+  let gMat = new B.StandardMaterial('', scene)
+  gMat.diffuseColor = B.Color3.FromHexString('#111111')
+  // gMat.bumpTexture = new B.Texture(normURL, scene)
+  // gMat.bumpTexture.uScale = 4
+  // gMat.bumpTexture.vScale = 4
+  // gMat.bumpTexture.level = .2
+  // gMat.useParallax = true
+  // gMat.useParallaxOcclusion = true
+  // gMat.parallaxScaleBias = .069
+  ground.material = gMat
 
   engine.runRenderLoop(() => {
     scene.render()
