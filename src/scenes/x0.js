@@ -70,13 +70,12 @@ let createScene = async (canvas, cb = _ => { }) => {
 
   let gMat = new B.StandardMaterial('', scene)
   gMat.diffuseColor = B.Color3.FromHexString('#111111')
-  // gMat.bumpTexture = new B.Texture(normURL, scene)
-  // gMat.bumpTexture.uScale = 4
-  // gMat.bumpTexture.vScale = 4
-  // gMat.bumpTexture.level = .2
-  // gMat.useParallax = true
-  // gMat.useParallaxOcclusion = true
-  // gMat.parallaxScaleBias = .069
+  let noise = new B.NoiseProceduralTexture('', 1024, scene)
+  noise.brightness = .95
+  noise.octaves = 16
+  noise.persistence = 1
+  noise.animationSpeedFactor = 1
+  gMat.diffuseTexture = noise
   ground.material = gMat
 
   engine.runRenderLoop(() => {
