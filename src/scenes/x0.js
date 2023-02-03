@@ -46,7 +46,7 @@ let createScene = async (canvas, cb = _ => { }) => {
 
   let meshImports = await B.SceneLoader.ImportMeshAsync('hand', handURL, void 0, scene, null, '.stl')
   let hand = meshImports.meshes[0]
-  hand.position = new B.Vector3(-1, -2, 1)
+  hand.position = new B.Vector3(-2, -2, 1)
   hand.rotation = new Vector3(0, Math.PI / 3, -.2)
   hand.scaling = Vector3.One().scale(.02)
   shadow.getShadowMap().renderList.push(hand)
