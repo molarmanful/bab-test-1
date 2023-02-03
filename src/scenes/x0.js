@@ -71,9 +71,9 @@ let createScene = async (canvas, cb = _ => { }) => {
   ground.receiveShadows = true
 
   let gMat = new B.StandardMaterial('', scene)
-  gMat.diffuseColor = B.Color3.FromHexString('#999999')
+  gMat.diffuseColor = B.Color3.FromHexString('#888888')
   let noise = new B.NoiseProceduralTexture('', 1024, scene)
-  noise.brightness = .95
+  noise.brightness = .99
   noise.octaves = 16
   noise.persistence = 1
   noise.animationSpeedFactor = 1
