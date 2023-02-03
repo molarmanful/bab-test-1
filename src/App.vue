@@ -4,9 +4,14 @@ import { createScene } from './scenes/x0'
 
 let bcan = ref(null)
 let fps = ref(0)
+let ready = ref(false)
 
 onMounted(_ => {
   createScene(bcan.value, ({ engine, scene }) => {
+    scene.executeWhenReady(_ => {
+      ready = true
+    })
+
     scene.registerAfterRender(_ => {
       fps.value = engine.getFps() | 0
     })
@@ -15,7 +20,7 @@ onMounted(_ => {
 </script>
 
 <template>
-  <section flex justify-center items-center>
+  <section flex justify-center items-center transition-opacity duration-500 :opacity="+ready">
     <span fixed top-0 right-0 text-white>{{ fps }}fps</span>
     <canvas ref="bcan" w-screen h-screen outline-0></canvas>
   </section>
