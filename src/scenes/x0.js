@@ -2,8 +2,7 @@ import * as B from '@babylonjs/core'
 import { Vector3 } from '@babylonjs/core'
 import '@babylonjs/loaders'
 import handURL from './assets/hand.stl'
-import normURL from './assets/normal.jpg'
-// import envURL from './assets/environment.env'
+import envURL from './assets/environment.env'
 
 let createScene = async (canvas, cb = _ => { }) => {
   let dpiScale = 1
@@ -28,11 +27,9 @@ let createScene = async (canvas, cb = _ => { }) => {
   pipe.grain.animated = true
   pipe.bloomEnabled = true
 
-  // let light = new B.HemisphericLight('light', new B.Vector3(0, 1, .5), scene)
-  let dir = new B.Vector3(-1, -4, -2)
-  let hlight = new B.HemisphericLight('light', dir.scale(-1), scene)
-  hlight.intensity = .1
-  let light = new B.DirectionalLight('light', dir, scene)
+  // let hlight = new B.HemisphericLight('hlight', new B.Vector3(-1, -1, 0), scene)
+  // hlight.intensity = 0.1
+  let light = new B.DirectionalLight('light', new B.Vector3(-1, -4, -2), scene)
   light.intensity = 1.4
   let shadow = new B.CascadedShadowGenerator(2048, light)
   shadow.usePercentageCloserFiltering = true
@@ -56,6 +53,11 @@ let createScene = async (canvas, cb = _ => { }) => {
   hand.receiveShadows = true
 
   let hMat = new B.StandardMaterial('', scene)
+  let refl = B.CubeTexture.CreateFromPrefilteredData(envURL, scene)
+  hMat.reflectionTexture = refl
+  hMat.reflectionFresnelParameters = new B.FresnelParameters()
+  hMat.reflectionFresnelParameters.bias = .2
+  hMat.reflectionFresnelParameters.power = 1
   hand.material = hMat
 
   // let sphereSize = 2
@@ -63,13 +65,13 @@ let createScene = async (canvas, cb = _ => { }) => {
   // shadow.getShadowMap().renderList.push(sphere)
   // sphere.receiveShadows = true
 
-  let ground = B.MeshBuilder.CreateDisc('ground', { radius: 20 }, scene)
+  let ground = B.MeshBuilder.CreateDisc('ground', { radius: 30 }, scene)
   ground.position = new B.Vector3(0, -2, 0)
   ground.rotation = new B.Vector3(Math.PI / 2, 0, 0)
   ground.receiveShadows = true
 
   let gMat = new B.StandardMaterial('', scene)
-  gMat.diffuseColor = B.Color3.FromHexString('#111111')
+  gMat.diffuseColor = B.Color3.FromHexString('#999999')
   let noise = new B.NoiseProceduralTexture('', 1024, scene)
   noise.brightness = .95
   noise.octaves = 16
