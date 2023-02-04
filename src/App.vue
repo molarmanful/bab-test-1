@@ -23,6 +23,6 @@ onMounted(_ => {
   <section flex justify-center items-center transition-opacity duration-500 :opacity="ready * 100">
     <span fixed top-0 right-0 text-white>{{ fps }}fps</span>
     <canvas ref="bcan" w-screen h-screen outline-0></canvas>
-    <div hidden opacity="0 100"></div>
   </section>
+  <x hidden opacity="0 100" />
 </template>
