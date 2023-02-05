@@ -9,7 +9,7 @@ let ready = ref(false)
 onMounted(_ => {
   createScene(bcan.value, ({ engine, scene }) => {
     scene.executeWhenReady(_ => {
-      ready = true
+      ready.value = true
     })
 
     scene.registerAfterRender(_ => {
