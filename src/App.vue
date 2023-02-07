@@ -24,5 +24,5 @@ onMounted(_ => {
     <span fixed top-0 right-0 text-white>{{ fps }}fps</span>
     <canvas ref="bcan" w-screen h-screen outline-0></canvas>
   </section>
-  <x hidden opacity="0 100" />
+  <div hidden opacity="0 100" />
 </template>
