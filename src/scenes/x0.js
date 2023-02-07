@@ -1,5 +1,4 @@
 import * as B from '@babylonjs/core'
-import { Vector3 } from '@babylonjs/core'
 import '@babylonjs/loaders'
 import handURL from './assets/hand.stl'
 import envURL from './assets/environment.env'
